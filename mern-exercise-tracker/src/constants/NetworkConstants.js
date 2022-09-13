@@ -1,0 +1,5 @@
+export const GET_REQUEST = 'get'
+export const DELETE_REQUEST = 'delete'
+export const POST_REQUEST = 'post'
+export const PATCH_REQUEST = 'patch'
+export const PUT_REQUEST = 'put'
