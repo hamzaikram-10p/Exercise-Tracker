@@ -3,10 +3,12 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { makeRequest } from "../NetworkLayer/axios";
 import { POST_REQUEST } from "../constants/NetworkConstants";
+import { toast } from "react-toastify";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onChangeUsername = (e) => {
     setUsername(e.target.value);
@@ -17,20 +19,22 @@ const Login = (props) => {
   };
 
   const onSubmit = async (e) => {
+    setIsSubmitting(true);
     e.preventDefault();
-
-    const user = {
-      username: username,
-      password: password,
-    };
-
-    console.log(user);
-
-    const response = await makeRequest("users/login", POST_REQUEST, user);
-    const cookies = new Cookies();
-    cookies.set("token", response.data.accessToken, { path: "/" });
-    console.log(response.data);
-    window.location = "/exerciseList";
+    try {
+      const user = {
+        username: username,
+        password: password,
+      };
+      const response = await makeRequest("users/login", POST_REQUEST, user);
+      const cookies = new Cookies();
+      cookies.set("token", response.data.accessToken, { path: "/" });
+      window.location = "/exerciseList";
+    } catch (e) {
+        toast("Username or password is incorrect")
+    }finally{
+        setIsSubmitting(false);
+    }
   };
 
   return (
@@ -59,7 +63,11 @@ const Login = (props) => {
           />
         </div>
         <div className="form-group">
-          <input type="submit" value="Login" className="btn btn-primary" />
+          {isSubmitting ? (
+            <span className="spinner-border spinner-border-sm mr-1"></span>
+          ) : (
+            <input type="submit" value="Login" className="btn btn-primary" />
+          )}
         </div>
       </form>
     </div>
