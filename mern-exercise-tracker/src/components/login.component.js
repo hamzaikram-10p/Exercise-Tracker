@@ -4,6 +4,7 @@ import Cookies from "universal-cookie";
 import { makeRequest } from "../NetworkLayer/axios";
 import { POST_REQUEST } from "../constants/NetworkConstants";
 import { toast } from "react-toastify";
+import { toastErrorConfig } from "../helpers/Generichelpers";
 
 const Login = (props) => {
   const [username, setUsername] = useState("");
@@ -31,7 +32,7 @@ const Login = (props) => {
       cookies.set("token", response.data.accessToken, { path: "/" });
       window.location = "/exerciseList";
     } catch (e) {
-        toast("Username or password is incorrect")
+        toast.error("Username or password is incorrect", toastErrorConfig);
     }finally{
         setIsSubmitting(false);
     }
